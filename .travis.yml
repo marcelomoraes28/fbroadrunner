@@ -8,7 +8,9 @@ script:
 deploy:
   provider: pypi
   user: marcelomoraes28
-  password: $PIP_PASSWORD
+  password:
+    secure: "YeYv5EN77elqwFj/Zssddn/bugpdS/qEqUc7FQljtk0E47ogzJofFQdyAerlKude1vu2yZ/r1AZCIoFsDGwGcdfKv3dTR9tBu04KPGPdVu5FKx/lsuWsFrY2PbXFyMRuvdWz7lrP9N4SXGo0Wb9xAJpn5rVYwPCETVbVVa7vKfmB2Aw6z2BirI5WZSnnl85W5GsnTm0L9OSKGmz5d0d6CfSC3rKvG1EjPQeEodPDnAP9bvLUxWWkf+1nVeeqDo/tyYYtZws0bf4E+NmU2ydScld72XacqCar0GzbaomVW0t1mdepHlHdpk+OIy4B7yHlpSuIgCkAIADZkxeZTAMz/BS7HOuNGFDWd4xs21tFGMac+vZbPAwL/A4O3kUegqHJR4xc9tnJLIajBkRPPZ/6wKh9HwM4lacJTcfjmgL5apQeg6l8Bq6C5HzufjWrmjQ0clMaKCywpVaGv3LOo40/wwae//NlLr1M1f3dw/ynolFlKwovB8K2OotfFkDXQcFmShrfw0xWPDXLWs8ntEELeOI3emmclChO1YWWn5ugYMKwPjumsIhsVgVO0uDGlcSzZPIscdVjX+B2WLft1jpByxr66KmZIl45jVaTzOPMlJOazWVLk/aJJ3wg54TdIEaCrujW2i+G9zEXqt2XodtqsOwL/lRQWT6Wc5xz1oj76zU="
+
   on:
     tags: true
     branch: master
