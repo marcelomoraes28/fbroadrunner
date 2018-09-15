@@ -8,8 +8,7 @@ script:
 deploy:
   provider: pypi
   user: marcelomoraes28
-  password:
-    secure: 
+  password: $PIP_PASSWORD
   on:
     tags: true
     branch: master
