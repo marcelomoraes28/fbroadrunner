@@ -1,0 +1,2 @@
+class FbRoadRunnerFieldError(Exception):
+    pass
