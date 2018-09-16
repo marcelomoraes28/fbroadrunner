@@ -8,7 +8,7 @@
 
 ![alt text](roadrunner.png)
 
-A simple library that uses decorators pattern to help a build a sharing urls of messages or publication for facebook.
+An easy library that uses decorators pattern to help build sharing urls of messages or posts on facebook.
 
 ## Getting Started
 
@@ -27,7 +27,7 @@ These instructions will help you install library and use its features.
 pip install fbroadrunner
 ```
 
-Or you shall clone the repository and run
+Or you can clone the repository and run
 
 ```
 pip install -e .
@@ -47,7 +47,7 @@ pytest
 
 ## Using
 
-To start use the library you shall setting env FB_APP_ID with your facebook app id.
+To start use the library you can setting env FB_APP_ID with your facebook app id.
 
 ### Publication parameteres (extracted by [Facebook](https://developers.facebook.com/docs/sharing/reference/feed-dialog))
 ![alt text](fb_publisher.png)
@@ -124,7 +124,7 @@ def fb(request, **kwargs):
     return Response(kwargs.get('fb_url'))
 ```
 
-Received link and mobile by post to return a mobile link
+If you're using mobile you should use the example below.
 
 **CODE**
 ```
