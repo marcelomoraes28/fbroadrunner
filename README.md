@@ -1,6 +1,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/marcelomoraes28/fbroadrunner/badge.svg?branch=pyramid)](https://coveralls.io/github/marcelomoraes28/fbroadrunner?branch=pyramid)
 [![Build Status](https://travis-ci.org/marcelomoraes28/fbroadrunner.svg?branch=master)](https://travis-ci.org/marcelomoraes28/fbroadrunner)
-[![Pypi](https://img.shields.io/badge/pypi-0.0.1--alpha-yellow.svg)](https://shields.io)
+[![Pypi](https://img.shields.io/badge/pypi-0.0.2--alpha-yellow.svg)](https://shields.io)
 [![Python](https://img.shields.io/badge/python-3.6-blue.svg)](https://shields.io)
 
 
