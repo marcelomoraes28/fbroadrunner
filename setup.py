@@ -19,7 +19,7 @@ setup(
     version='0.0.1-alpha',
     description='Facebook Road Runner',
     classifiers=[
-        'Development Status :: 1 - Alpha',
+        'Development Status :: 3 - Alpha',
         'Programming Language :: Python',
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
