@@ -27,7 +27,7 @@ setup(
     ],
     author='Marcelo Moraes',
     author_email='marcelomoraesjr28@gmail.com',
-    url='',
+    url='https://github.com/marcelomoraes28/fbroadrunner',
     keywords='fbroadrunner roadrunner facebook',
     include_package_data=True,
     zip_safe=False,
