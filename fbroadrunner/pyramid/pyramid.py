@@ -1,20 +1,11 @@
-import os
-
 from fbroadrunner.errors import FbRoadRunnerFieldError
+from fbroadrunner.settings import get_app_id_from_env
 from ..validators.schema import CustomNormalizer, PUBLICATION_SCHEMA, MESSAGE_SCHEMA
 from urllib import parse
 
 FACEBOOK_DIALOG_WEB = "https://www.facebook.com/dialog/feed?{}"
 MESSAGE_DIALOG_WEB = "http://www.facebook.com/dialog/send?{}"
 MESSAGE_DIALOG_MOBILE = "fb-messenger://share?{}"
-
-
-def _get_app_id_from_env():
-    try:
-        fb_app_id = int(os.getenv('FB_APP_ID'))
-    except (ValueError, TypeError):
-        fb_app_id = None
-    return fb_app_id
 
 
 def _validate_and_normalize_payload(payload, schema):
@@ -47,7 +38,7 @@ def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None, to=Non
             nonlocal to
             nonlocal display
             post = request.POST
-            post['app_id'] = app_id if app_id else _get_app_id_from_env()
+            post['app_id'] = app_id if app_id else get_app_id_from_env()
             post['default_link'] = link
             post['default_display'] = display
             post['default_redirect_uri'] = redirect_uri
@@ -90,7 +81,7 @@ def fb_publication(redirect_uri=None, link=None, app_id=None, display=None, to=N
             nonlocal fb_from
             nonlocal source
             post = request.POST
-            post['app_id'] = app_id if app_id else _get_app_id_from_env()
+            post['app_id'] = app_id if app_id else get_app_id_from_env()
             post['default_link'] = link
             post['default_display'] = display
             post['default_redirect_uri'] = redirect_uri
