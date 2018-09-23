@@ -10,12 +10,23 @@ def conf_request():
     return Request
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="class")
 def message_payload():
     return {
-        "app_id": "12345",
         "default_link": "http://fbroadrunner",
         "default_display": "display:none",
         "default_redirect_uri": "http://fbroadrunner",
         "default_to": "fbroadrunner",
+    }
+
+
+@pytest.fixture(scope="class")
+def publication_payload():
+    return {
+        "default_link": "http://fbroadrunner",
+        "default_display": "display:none",
+        "default_redirect_uri": "http://fbroadrunner",
+        "default_to": "fbroadrunner",
+        "default_from": "alien",
+        "default_source": "predator"
     }
