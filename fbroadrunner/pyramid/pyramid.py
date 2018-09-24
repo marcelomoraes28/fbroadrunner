@@ -1,25 +1,10 @@
-from fbroadrunner.errors import FbRoadRunnerFieldError
-from fbroadrunner.settings import get_app_id_from_env
-from ..validators.schema import CustomNormalizer, PUBLICATION_SCHEMA, MESSAGE_SCHEMA
-from urllib import parse
+from json import JSONDecodeError
 
-FACEBOOK_DIALOG_WEB = "https://www.facebook.com/dialog/feed?{}"
-MESSAGE_DIALOG_WEB = "http://www.facebook.com/dialog/send?{}"
-MESSAGE_DIALOG_MOBILE = "fb-messenger://share?{}"
+from fbroadrunner.functions import get_message_url, get_publication_url
 
 
-def _validate_and_normalize_payload(payload, schema):
-    validator = CustomNormalizer(schema)
-    normalized = validator.normalized(payload)
-    # Purge unknown fields
-    purge_unknown = {k: v for k, v in normalized.items() if k in schema}
-    if not validator.validate(purge_unknown):
-        raise FbRoadRunnerFieldError(validator.errors)
-    # Removing None values
-    return {k: v for k, v in purge_unknown.items() if v is not None}
-
-
-def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None, to=None, mobile=False):
+def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None,
+                 to=None, mobile=False):
     """
     This decorator help us to build a share facebook messenger url
     :param app_id: Your app's unique identifier. Required.
@@ -30,6 +15,7 @@ def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None, to=Non
     :param mobile: True or False
     :return:
     """
+
     def message(func):
         def wrapper(request, *args, **kwargs):
             nonlocal app_id
@@ -38,18 +24,9 @@ def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None, to=Non
             nonlocal to
             nonlocal display
             post = request.POST
-            post['app_id'] = app_id if app_id else get_app_id_from_env()
-            post['default_link'] = link
-            post['default_display'] = display
-            post['default_redirect_uri'] = redirect_uri
-            post['default_to'] = to
-            mobile = True if 'fb_is_mobile' in request.POST else mobile
-            normalized_payload = _validate_and_normalize_payload(post, MESSAGE_SCHEMA)
-
-            if mobile:
-                url = MESSAGE_DIALOG_MOBILE.format(parse.urlencode(normalized_payload))
-            else:
-                url = MESSAGE_DIALOG_WEB.format(parse.urlencode(normalized_payload))
+            url = get_message_url(post=post, app_id=app_id, to=to, link=link,
+                                  display=display, redirect_uri=redirect_uri,
+                                  mobile=mobile)
             result = func(request, fb_url=url)
             return result
 
@@ -58,7 +35,8 @@ def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None, to=Non
     return message
 
 
-def fb_publication(redirect_uri=None, link=None, app_id=None, display=None, to=None, fb_from=None, source=None):
+def fb_publication(redirect_uri=None, link=None, app_id=None, display=None,
+                   to=None, fb_from=None, source=None, is_json=False):
     """
     This decorator help us to build a share facebook publisher url
     :param redirect_uri: The URL to redirect to after a person clicks a button on the dialog
@@ -80,18 +58,19 @@ def fb_publication(redirect_uri=None, link=None, app_id=None, display=None, to=N
             nonlocal to
             nonlocal fb_from
             nonlocal source
-            post = request.POST
-            post['app_id'] = app_id if app_id else get_app_id_from_env()
-            post['default_link'] = link
-            post['default_display'] = display
-            post['default_redirect_uri'] = redirect_uri
-            post['default_to'] = to
-            post['default_from'] = fb_from
-            post['default_source'] = source
-            normalized_payload = _validate_and_normalize_payload(post, PUBLICATION_SCHEMA)
-            url = FACEBOOK_DIALOG_WEB.format(parse.urlencode(normalized_payload))
-            result = func(request, fb_url=url)
-            return result
+            try:
+                if is_json:
+                    post = request.json_body
+                else:
+                    if request.POST:
+                        post = request.POST
+                    else:
+                        return func(request, fb_url="")
+            except JSONDecodeError:
+                return func(request, fb_url="")
+            url = get_publication_url(post, app_id, link, display,
+                                      redirect_uri, to, fb_from, source)
+            return func(request, fb_url=url)
 
         return wrapper
 
