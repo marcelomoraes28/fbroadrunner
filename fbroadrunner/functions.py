@@ -1,7 +1,7 @@
 import os
 from urllib import parse
 
-from fbroadrunner.errors import FbRoadRunnerFieldError
+from fbroadrunner.exceptions import FbRoadRunnerFieldError
 from fbroadrunner.validators.schema import CustomNormalizer
 from fbroadrunner.validators.schema import MESSAGE_SCHEMA, PUBLICATION_SCHEMA
 
