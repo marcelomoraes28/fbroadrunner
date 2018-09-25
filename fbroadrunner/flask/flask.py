@@ -26,7 +26,7 @@ def fb_messenger(request=None, app_id=None, link=None, redirect_uri=None,
             else:
                 post = request.form.to_dict()
             if not post:
-                return func(fb_url='')
+                post = {}
             url = get_message_url(post=post, app_id=app_id, to=to, link=link,
                                   display=display, redirect_uri=redirect_uri,
                                   mobile=mobile)

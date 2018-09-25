@@ -65,7 +65,7 @@ def fb_publication(redirect_uri=None, link=None, app_id=None, display=None,
                     if request.POST:
                         post = request.POST
                     else:
-                        return func(request, fb_url="")
+                        post = {}
             except JSONDecodeError:
                 return func(request, fb_url="")
             url = get_publication_url(post, app_id, link, display,
