@@ -58,7 +58,7 @@ def test_fb_publication_raises(mocker, conf_request):
 
 def test_fb_publication_with_env(monkeypatch, conf_request):
     monkeypatch.setenv('FB_APP_ID', 123456789)
-    request = conf_request(post={})
+    request = conf_request(post={"fb_link": "https://fbroadrunner"})
     fb_pub = example_fb_publication_without_app_id(request=request)
     assert fb_pub == 'https://www.facebook.com/dialog/feed?app_id=123456789&link=https%3A%2F%2Ffbrunner.com&redirect_uri=https%3A%2F%2Ffbrunner.com'
 
