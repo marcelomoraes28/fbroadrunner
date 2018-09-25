@@ -1,10 +1,8 @@
-from json import JSONDecodeError
-
 from fbroadrunner.functions import get_message_url, get_publication_url
 
 
-def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None,
-                 to=None, mobile=False):
+def fb_messenger(request=None, app_id=None, link=None, redirect_uri=None,
+                 display=None, to=None, mobile=False, is_json=False):
     """
     This decorator help us to build a share facebook messenger url
     :param app_id: Your app's unique identifier. Required.
@@ -17,17 +15,22 @@ def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None,
     """
 
     def message(func):
-        def wrapper(request, *args, **kwargs):
+        def wrapper(*args, **kwargs):
             nonlocal app_id
             nonlocal mobile
             nonlocal link
             nonlocal to
             nonlocal display
-            post = request.POST
+            if is_json:
+                post = request.json
+            else:
+                post = request.form.to_dict()
+            if not post:
+                post = {}
             url = get_message_url(post=post, app_id=app_id, to=to, link=link,
                                   display=display, redirect_uri=redirect_uri,
                                   mobile=mobile)
-            result = func(request, fb_url=url)
+            result = func(fb_url=url)
             return result
 
         return wrapper
@@ -35,7 +38,8 @@ def fb_messenger(app_id=None, link=None, redirect_uri=None, display=None,
     return message
 
 
-def fb_publication(redirect_uri=None, link=None, app_id=None, display=None,
+def fb_publication(request=None, redirect_uri=None, link=None, app_id=None,
+                   display=None,
                    to=None, fb_from=None, source=None, is_json=False):
     """
     This decorator help us to build a share facebook publisher url
@@ -50,7 +54,7 @@ def fb_publication(redirect_uri=None, link=None, app_id=None, display=None,
     """
 
     def publicated(func):
-        def wrapper(request, *args, **kwargs):
+        def wrapper(*args, **kwargs):
             nonlocal app_id
             nonlocal display
             nonlocal link
@@ -58,19 +62,15 @@ def fb_publication(redirect_uri=None, link=None, app_id=None, display=None,
             nonlocal to
             nonlocal fb_from
             nonlocal source
-            try:
-                if is_json:
-                    post = request.json_body
-                else:
-                    if request.POST:
-                        post = request.POST
-                    else:
-                        post = {}
-            except JSONDecodeError:
-                return func(request, fb_url="")
+            if is_json:
+                post = request.json
+            else:
+                post = request.form.to_dict()
+            if not post:
+                return func(fb_url='')
             url = get_publication_url(post, app_id, link, display,
                                       redirect_uri, to, fb_from, source)
-            return func(request, fb_url=url)
+            return func(fb_url=url)
 
         return wrapper
 
